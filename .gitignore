@@ -1,7 +1,51 @@
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# Production
 dist/
-coverage/
-*.log
+build/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Database (development)
 prisma/dev.db
 prisma/dev.db-journal
+prisma/dev.db-shm
+prisma/dev.db-wal
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+.prettierignore
+
+# Misc
+.cache/
+.tmp/
+temp/
