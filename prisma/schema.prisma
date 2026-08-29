@@ -1,0 +1,57 @@
+// Prisma schema for FinTrack API
+// Money is stored as integer cents (Int) — never floats.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String            @id @default(uuid())
+  name              String
+  transactions      Transaction[]
+  createdExpenses   SharedExpense[]   @relation("ExpenseCreator")
+  participantShares ExpenseParticipant[]
+  createdAt         DateTime          @default(now())
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  description String
+  amountCents Int
+  type        String // "debit" | "credit"
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SharedExpense {
+  id           String               @id @default(uuid())
+  creatorId    String
+  creator      User                 @relation("ExpenseCreator", fields: [creatorId], references: [id])
+  description  String
+  totalCents   Int
+  splitType    String // "equal" | "custom"
+  participants ExpenseParticipant[]
+  createdAt    DateTime             @default(now())
+
+  @@index([creatorId])
+}
+
+model ExpenseParticipant {
+  id         String        @id @default(uuid())
+  expenseId  String
+  expense    SharedExpense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  shareCents Int
+
+  @@index([expenseId])
+  @@index([userId])
+}
